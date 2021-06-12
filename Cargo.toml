@@ -54,3 +54,11 @@ crate-type=["rlib", "cdylib"]   # Required for python
 
 [[bench]]
 name = "latency"
+
+[[bin]]
+name = "erdos"
+path = "src/main.rs"
+
+[[bin]]
+name = "image_classify"
+path = "src/main_image_classify.rs"
