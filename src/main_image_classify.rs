@@ -2,13 +2,13 @@
 extern crate erdos;
 
 use std::fs;
-use std::io::{self, Write};
-use std::str::{self, FromStr};
+use std::io::Write;
+use std::str;
 use std::process::{Command, Stdio};
 
 use erdos::dataflow::{
     message::{Timestamp, Message},
-    operators::{JoinOperator, SourceOperator, MapOperator},
+    operators::MapOperator,
     stream::{IngestStream, ExtractStream},
     OperatorConfig,
 };
@@ -28,7 +28,7 @@ fn main() {
     let mut extract_stream = ExtractStream::new(0, &r_stream);
 
     let args = erdos::new_app("ERDOS").get_matches();
-    let mut node = Node::new(Configuration::from_args(&args));
+    let node = Node::new(Configuration::from_args(&args));
     node.run_async();
 
     let foods = vec!["hamburger.jpg", "hotdog.jpg", "sanwich.jpg"];
@@ -37,15 +37,15 @@ fn main() {
         let ts = Timestamp::new(vec![i as u64]);
         let fv = fs::read(format!("./images/{}", food)).unwrap();
         match ingest_stream.send(Message::new_message(ts.clone(), fv)) {
-            Err(e) => (),
+            Err(_e) => (),
             _ => (),
         };
         match ingest_stream.send(Message::new_watermark(ts.clone())) {
-            Err(e) => (),
+            Err(_e) => (),
             _ => (),
         };
         let msg = extract_stream.read().unwrap();
-        println!("<>-----{:?}", msg.data().unwrap());
+        println!("{:?}", msg.data().unwrap());
         extract_stream.read().unwrap();
     }
 }
