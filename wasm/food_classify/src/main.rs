@@ -1,5 +1,5 @@
 use std::io::{self, Read};
-use ssvm_tensorflow_interface;
+use wasmedge_tensorflow_interface;
 use urlencoding::encode;
 use ssvm_wasi_helper::ssvm_wasi_helper::_initialize;
 
@@ -11,9 +11,9 @@ pub fn main() {
   let mut buffer = Vec::new();
   io::stdin().read_to_end(&mut buffer).expect("Error reading from STDIN");
 
-  let flat_img = ssvm_tensorflow_interface::load_jpg_image_to_rgb8(&buffer, 192, 192);
+  let flat_img = wasmedge_tensorflow_interface::load_jpg_image_to_rgb8(&buffer, 192, 192);
 
-  let mut session = ssvm_tensorflow_interface::Session::new(&model_data, ssvm_tensorflow_interface::ModelType::TensorFlowLite);
+  let mut session = wasmedge_tensorflow_interface::Session::new(&model_data, wasmedge_tensorflow_interface::ModelType::TensorFlowLite);
   session.add_input("input", &flat_img, &[1, 192, 192, 3])
          .run();
   let res_vec: Vec<u8> = session.get_output("MobilenetV1/Predictions/Softmax");

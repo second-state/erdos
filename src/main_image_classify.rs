@@ -51,7 +51,7 @@ fn main() {
 }
 
 fn run_classify_wasm(bytes: &Vec<u8>) -> String {
-    let mut child = Command::new("ssvm-tensorflow")
+    let mut child = Command::new("wasmedge-tensorflow")
         .arg("./wasm/food_classify/pkg/food_classify.wasm")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
